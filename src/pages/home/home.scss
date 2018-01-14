@@ -1,0 +1,179 @@
+$ylw:#ffd004ff;
+
+.toolbar-background {
+    background-color: white;
+}
+
+page-home {
+    .content{
+        background-color: #eee;
+        .no-data{
+            color:grey;
+            text-align: center;
+        }
+        .search-container{
+            padding:10px;
+            width: 100%;
+            input{
+                display: block;
+                margin:0 auto;
+                text-align: center;
+                border-radius: 7px;
+                border:none;
+                padding:7px;
+                width: 100%;
+                margin-bottom:10px;
+            }
+        }
+        .container{
+            width: 100%;
+            display: inline-block;
+            overflow: hidden;
+            position:relative;
+            .tag{
+                background-color:$ylw;
+                padding:10px;
+                display: inline-block;
+                position:absolute;
+                left:0;
+                top:0;
+                p{
+                    margin:0;
+                    font-weight: bold;
+                    font-style: italic;
+                }
+            }
+            .inner{
+                background-color: white;
+                width: 100%;
+                display: inline-block;
+                overflow: hidden;
+                margin-top:20px;
+                padding-top:30px;
+                padding-top:30px;
+                padding-left:15px;
+                padding-right:15px;
+                .no-events{
+                    color:#ddd;
+                    font-size: 1.8rem;
+                    text-align: center;
+                    ion-icon{
+                        text-align: center;
+                        font-size: 4rem;
+                    }  
+                }
+                .event{
+                    width: 100%;
+                    display: inline-block;
+                    overflow: hidden;
+                    color:black;
+                    margin-top:10px;
+                    margin-bottom:10px;
+                    .image-container{
+                        overflow: hidden;
+                        height:115px;
+                        background-position: center center;
+                        background-repeat: no-repeat;
+                        background-size: cover;
+                        text-align: center;
+                        color:white;
+                        .day{
+                            font-size: 4.5rem;
+                            margin:0;
+                            font-weight: 700;
+                        }
+                        .month{
+                            font-size: 2.3rem;
+                            margin:0;
+                        }
+                    }
+                    .info-container{
+                        padding:0;
+                        padding-left:15px;
+                        
+                        .title{
+                            margin:0;
+                            margin-bottom:5px;
+                            font-weight: 700;
+                            font-size:1.3rem;
+                            transform:scale(1,1.5);
+                        }
+                        .when{
+                            margin:0;
+                            margin-bottom:7px;
+                        }
+                        .members-container{
+                            position: relative;
+                            width: 100%;
+                            margin-bottom:10px;
+                            overflow: hidden;
+                            box-sizing: border-box;
+                            height: 60px;
+                            .member-image{
+                                border-radius: 50%;
+                                height: 28px;
+                                position:absolute;
+                                border:solid 3px white;
+                                        display: inline-block;
+                            }
+                                
+                            .others{
+                                    font-weight: 700;
+                                    margin:0;
+                                    margin-top:5px;
+                            }
+                            
+                            
+                        }
+                        
+                        .action-container{
+                            position: absolute;
+                            display: inline-block;
+                            bottom:0;
+                            width: 100%;
+                            button{
+                                padding:5px 10px 5px 10px;
+                                font-weight: 500;
+                                background-color: #ccc;
+                                margin-right:10px;
+                                .icon{
+                                    margin-right:5px;
+                                }
+                            }
+                            .selected{
+                                background-color: $ylw;
+                            }
+                            .past-selected{
+                                padding:5px 10px 5px 10px;
+                                font-weight: 500;
+                                background-color: #ccc;
+                                margin-right:10px;
+                                background-color: $ylw;
+                                margin:0;
+                                display: inline-block;
+                                .icon{
+                                    margin-right:5px;
+                                }
+                            }
+                        }
+                        
+                    }
+                    
+                }
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

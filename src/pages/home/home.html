@@ -1,0 +1,245 @@
+<ion-header no-border>
+  <ion-navbar>
+    <ion-title text-center text-uppercase>
+      events
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="content" *ngIf="!dataError">
+  <div class="search-container">
+    <input type="text" placeholder="Search event" [(ngModel)]="searchValue" (keyup)="searchInput($event)"> 
+  </div>
+  <p class="no-data" *ngIf="today_events.length==0 && week_events.length==0 && month_events.length==0 && past_events.length==0 && others_events.length==0">No results for your research</p>
+  <div class="container" *ngIf="today_events.length!=0">
+      <div class="tag">
+        <p>TODAY EVENTS</p>
+      </div>
+      <div class="inner">
+        <div class="no-events" *ngIf="today_events.length==0">
+          <ion-icon name="calendar"></ion-icon>
+          <p>No events recorded</p>
+        </div>
+        <div class="event" *ngFor="let e of today_events">
+            <ion-grid *ngIf="searchValue=='' || (searchValue!='' && e.title.toLowerCase().startsWith(searchValue.toLowerCase()))" (click)="goEventDetails(e.title)">
+                <ion-row>
+                  <ion-col col-4 class="image-container" [ngStyle]="{'background-image': 'url(' + e.image + ')'}">
+                    <p class="day" text-uppercase>{{getDay(e.dateTime)}}</p>
+                    <p class="month" text-uppercase>{{getMonth(e.dateTime)}}</p>
+                  </ion-col>
+                  <ion-col col-8 class="info-container">
+                    <p class="title" text-uppercase>{{e.title}}</p>
+                    <p class="when" *ngIf="!checkIsTomorrow(e.dateTime)">{{getDayName(e.dateTime)}} from {{getHour(e.dateTime)}}</p>
+                    <p class="when" *ngIf="checkIsTomorrow(e.dateTime)">Tomorrow from {{getHour(e.dateTime)}}</p>
+                    <div class="members-container">
+                      <ion-grid class="members-container">
+                          <ion-row>
+                              <ion-col col-4 class="info-container">
+                                <img class="member-image" *ngFor="let i of e.members.slice(0,3); let j = index" [src]="i.photo" [ngStyle]="{'left':j*17 +'px', 'z-index':j}">
+                              </ion-col>
+                              <ion-col col-8 class="info-container">
+                                <p class="others" *ngIf="e.members.length>3">+{{e.members.length-3}} others</p>
+                              </ion-col>
+                          </ion-row>
+                      </ion-grid>
+                    </div>
+                    
+                    
+                    <div class="action-container">
+                      <p *ngIf="e.status=='going'" class="past-selected">
+                        <ion-icon name="checkmark" class="icon"></ion-icon>Gone
+                      </p>
+                      <p *ngIf="e.status=='ignore'" class="past-selected">
+                          <ion-icon name="checkmark" class="icon"></ion-icon>Ignored
+                      </p>
+                    </div>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+        </div>
+      </div>
+    </div>
+  <div class="container" *ngIf="week_events.length!=0">
+    <div class="tag">
+      <p>THIS WEEK</p>
+    </div>
+    <div class="inner">
+      
+      <div class="event" *ngFor="let e of week_events" >
+          <ion-grid  (click)="goEventDetails(e.title)">
+              <ion-row>
+                <ion-col col-4 class="image-container" [ngStyle]="{'background-image': 'url(' + e.image + ')'}">
+                  <p class="day" text-uppercase>{{getDay(e.dateTime)}}</p>
+                  <p class="month" text-uppercase>{{getMonth(e.dateTime)}}</p>
+                </ion-col>
+                <ion-col col-8 class="info-container">
+                  <p class="title" text-uppercase>{{e.title}}</p>
+                  <p class="when" *ngIf="!checkIsTomorrow(e.dateTime)">{{getDayName(e.dateTime)}} from {{getHour(e.dateTime)}}</p>
+                  <p class="when" *ngIf="checkIsTomorrow(e.dateTime)">Tomorrow from {{getHour(e.dateTime)}}</p>
+                  <div class="members-container">
+                    <ion-grid class="members-container">
+                        <ion-row>
+                            <ion-col col-4 class="info-container">
+                              <img class="member-image" *ngFor="let i of e.members.slice(0,3); let j = index" [src]="i.photo" [ngStyle]="{'left':j*17 +'px', 'z-index':j}">
+                            </ion-col>
+                            <ion-col col-8 class="info-container">
+                              <p class="others" *ngIf="e.members.length>3">+{{e.members.length-3}} others</p>
+                            </ion-col>
+                        </ion-row>
+                    </ion-grid>
+                  </div>
+                  
+                  
+                  <div class="action-container">
+                    <button [ngClass]="{'selected':getPreference(e.title)=='going'}" (click)="action(e.title,'going',$event)" *ngIf="getPreference(e.title)=='going' || getPreference(e.title)=='none'">
+                      <ion-icon name="checkmark" class="icon" *ngIf="getPreference(e.title)=='going'"></ion-icon>Going
+                    </button>
+                    <button [ngClass]="{'selected':getPreference(e.title)=='ignore'}" (click)="action(e.title,'ignore',$event)" *ngIf="getPreference(e.title)=='ignore' || getPreference(e.title)=='none'">
+                        <ion-icon name="checkmark" class="icon" *ngIf="getPreference(e.title)=='ignore'"></ion-icon>Ignore
+                    </button>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+      </div>
+
+    </div>
+  </div>
+  <div class="container" *ngIf="month_events.length!=0">
+    <div class="tag">
+      <p>THIS MONTH</p>
+    </div>
+    <div class="inner">
+      <div class="event" *ngFor="let e of month_events">
+          <ion-grid *ngIf="searchValue=='' || (searchValue!='' && e.title.toLowerCase().startsWith(searchValue.toLowerCase()))" (click)="goEventDetails(e.title)">
+              <ion-row>
+                <ion-col col-4 class="image-container" [ngStyle]="{'background-image': 'url(' + e.image + ')'}">
+                  <p class="day" text-uppercase>{{getDay(e.dateTime)}}</p>
+                  <p class="month" text-uppercase>{{getMonth(e.dateTime)}}</p>
+                </ion-col>
+                <ion-col col-8 class="info-container">
+                  <p class="title" text-uppercase>{{e.title}}</p>
+                  <p class="when" *ngIf="!checkIsTomorrow(e.dateTime)">{{getDayName(e.dateTime)}} from {{getHour(e.dateTime)}}</p>
+                  <p class="when" *ngIf="checkIsTomorrow(e.dateTime)">Tomorrow from {{getHour(e.dateTime)}}</p>
+                  <div class="members-container">
+                    <ion-grid class="members-container">
+                        <ion-row>
+                            <ion-col col-4 class="info-container">
+                              <img class="member-image" *ngFor="let i of e.members.slice(0,3); let j = index" [src]="i.photo" [ngStyle]="{'left':j*17 +'px', 'z-index':j}">
+                            </ion-col>
+                            <ion-col col-8 class="info-container">
+                              <p class="others" *ngIf="e.members.length>3">+{{e.members.length-3}} others</p>
+                            </ion-col>
+                        </ion-row>
+                    </ion-grid>
+                  </div>
+                  
+                  
+                  <div class="action-container">
+                    <button [ngClass]="{'selected':getPreference(e.title)=='going'}" (click)="action(e.title,'going',$event)" *ngIf="getPreference(e.title)=='going' || getPreference(e.title)=='none'">
+                      <ion-icon name="checkmark" class="icon" *ngIf="getPreference(e.title)=='going'"></ion-icon>Going
+                    </button>
+                    <button [ngClass]="{'selected':getPreference(e.title)=='ignore'}" (click)="action(e.title,'ignore',$event)" *ngIf="getPreference(e.title)=='ignore' || getPreference(e.title)=='none'">
+                        <ion-icon name="checkmark" class="icon" *ngIf="getPreference(e.title)=='ignore'"></ion-icon>Ignore
+                    </button>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+      </div>
+    </div>
+  </div>
+  <div class="container" *ngIf="others_events.length!=0">
+      <div class="tag">
+        <p>OTHERS</p>
+      </div>
+      <div class="inner">
+        <div class="event" *ngFor="let e of others_events">
+            <ion-grid *ngIf="searchValue=='' || (searchValue!='' && e.title.toLowerCase().startsWith(searchValue.toLowerCase()))" (click)="goEventDetails(e.title)">
+                <ion-row>
+                  <ion-col col-4 class="image-container" [ngStyle]="{'background-image': 'url(' + e.image + ')'}">
+                    <p class="day" text-uppercase>{{getDay(e.dateTime)}}</p>
+                    <p class="month" text-uppercase>{{getMonth(e.dateTime)}}</p>
+                  </ion-col>
+                  <ion-col col-8 class="info-container">
+                    <p class="title" text-uppercase>{{e.title}}</p>
+                    <p class="when" *ngIf="!checkIsTomorrow(e.dateTime)">{{getDayName(e.dateTime)}} from {{getHour(e.dateTime)}}</p>
+                    <p class="when" *ngIf="checkIsTomorrow(e.dateTime)">Tomorrow from {{getHour(e.dateTime)}}</p>
+                    <div class="members-container">
+                      <ion-grid class="members-container">
+                          <ion-row>
+                              <ion-col col-4 class="info-container">
+                                <img class="member-image" *ngFor="let i of e.members.slice(0,3); let j = index" [src]="i.photo" [ngStyle]="{'left':j*17 +'px', 'z-index':j}">
+                              </ion-col>
+                              <ion-col col-8 class="info-container">
+                                <p class="others" *ngIf="e.members.length>3">+{{e.members.length-3}} others</p>
+                              </ion-col>
+                          </ion-row>
+                      </ion-grid>
+                    </div>
+                    
+                    
+                    <div class="action-container">
+                      <p *ngIf="e.status=='going'" class="past-selected">
+                        <ion-icon name="checkmark" class="icon"></ion-icon>Gone
+                      </p>
+                      <p *ngIf="e.status=='ignore'" class="past-selected">
+                          <ion-icon name="checkmark" class="icon"></ion-icon>Ignored
+                      </p>
+                    </div>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+        </div>
+      </div>
+    </div>
+  <div class="container" *ngIf="past_events.length!=0">
+      <div class="tag">
+        <p>PAST EVENTS</p>
+      </div>
+      <div class="inner">
+        <div class="event" *ngFor="let e of past_events">
+            <ion-grid *ngIf="searchValue=='' || (searchValue!='' && e.title.toLowerCase().startsWith(searchValue.toLowerCase()))" (click)="goEventDetails(e.title)">
+                <ion-row>
+                  <ion-col col-4 class="image-container" [ngStyle]="{'background-image': 'url(' + e.image + ')'}">
+                    <p class="day" text-uppercase>{{getDay(e.dateTime)}}</p>
+                    <p class="month" text-uppercase>{{getMonth(e.dateTime)}}</p>
+                  </ion-col>
+                  <ion-col col-8 class="info-container">
+                    <p class="title" text-uppercase>{{e.title}}</p>
+                    <p class="when" *ngIf="!checkIsTomorrow(e.dateTime)">{{getDayName(e.dateTime)}} from {{getHour(e.dateTime)}}</p>
+                    <p class="when" *ngIf="checkIsTomorrow(e.dateTime)">Tomorrow from {{getHour(e.dateTime)}}</p>
+                    <div class="members-container">
+                      <ion-grid class="members-container">
+                          <ion-row>
+                              <ion-col col-4 class="info-container">
+                                <img class="member-image" *ngFor="let i of e.members.slice(0,3); let j = index" [src]="i.photo" [ngStyle]="{'left':j*17 +'px', 'z-index':j}">
+                              </ion-col>
+                              <ion-col col-8 class="info-container">
+                                <p class="others" *ngIf="e.members.length>3">+{{e.members.length-3}} others</p>
+                              </ion-col>
+                          </ion-row>
+                      </ion-grid>
+                    </div>
+                    
+                    
+                    <div class="action-container">
+                      <p *ngIf="e.status=='going'" class="past-selected">
+                        <ion-icon name="checkmark" class="icon"></ion-icon>Gone
+                      </p>
+                      <p *ngIf="e.status=='ignore'" class="past-selected">
+                          <ion-icon name="checkmark" class="icon"></ion-icon>Ignored
+                      </p>
+                    </div>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+        </div>
+      </div>
+    </div>
+  
+</ion-content>
+
+<ion-content class="content" *ngIf="dataError">
+  <p text-center>DATA ARE NOT AVAILABLE</p>
+</ion-content>

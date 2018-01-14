@@ -1,0 +1,134 @@
+$ylw:#ffd004ff;
+
+page-event {
+    .content{
+        background-color: #eee;
+        .back-button{
+            position: absolute;
+            top:10px;
+            left:10px;
+            background-color: transparent;
+            color:white;
+            display: block;
+            z-index: 1;
+            font-size: 2rem;
+            
+        }
+        .container{
+            width: 100%;
+            display: inline-block;
+            overflow: hidden;
+            position:relative;
+            .image-container{
+                height: 200px;
+                background-position: center center;
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+            .event-details-container{
+                background-color: white;
+                margin-bottom:5px;
+                .title{
+                    font-weight: bold;
+                    font-size: 3.5rem;
+                    
+                }
+                .host{
+                    margin-top:3px;
+                    margin-bottom:30px;
+                    color:gray;
+                }
+                .icon{
+                    font-size: 1.4rem;
+                    margin-right: 10px;
+                }
+                .when{
+                    margin-top:3px;
+                    font-weight: 400;
+                    
+                }
+                .going{
+                    margin-top:3px;
+                    font-weight: bold;
+                    
+                }
+                .members-container{
+                    position: relative;
+                    width: 100%;
+                    margin-bottom:20px;
+                    overflow: hidden;
+                    box-sizing: border-box;
+                    height: 60px;
+                    .member-image{
+                        border-radius: 50%;
+                        height: 48px;
+                        position:absolute;
+                        border:solid 3px white;
+                                display: inline-block;
+                    }
+                        
+                    .others{
+                        border-radius: 50%;
+                        height: 48px;
+                        width: 48px;
+                        padding-top:10px;
+                        font-size: 1.7rem;
+                        position:absolute;
+                        border:solid 3px white;
+                        display: inline-block;
+                        font-weight: bold;
+                        text-align: center;
+                        background-color: $ylw;
+                    }
+                    
+                    
+                }
+                .description-container{
+                    font-weight: 400;
+                    width: 100%;
+                    display: inline-block;
+                    span{
+                        font-weight: bold;
+                        display: inline;
+                    }
+                }
+            }
+            .leave-message-container{
+                padding:20px;
+                color:lightgray;
+                background-color: white;
+                margin-bottom:15px;
+                overflow: hidden;
+                input{
+                    border:none;
+                    width: 100%;
+                    margin-bottom:10px;
+                }
+                button{
+                    background-color: $ylw;
+                    font-weight: bold;
+                    padding:7px;
+                    float:right;
+                    border-radius:5px;
+                    margin-top:10px;
+                }
+                ion-icon{
+                    margin-left:10px;
+                }
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

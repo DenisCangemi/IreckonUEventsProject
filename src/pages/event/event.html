@@ -1,0 +1,51 @@
+<ion-content class="content" >
+  <button class="back-button" (click)="goBack()">
+    <ion-icon name="arrow-back"></ion-icon>
+    
+  </button>
+  <div class="container" *ngIf="event">
+      <div class="image-container" [ngStyle]="{'background-image': 'url(' + event.image + ')'}">
+      </div>
+      
+      <div class="event-details-container" padding>
+        <h1 class="title">{{event.title}}</h1>
+        <p class="host">Public event - {{event.description}} </p>
+        <p class="when" *ngIf="isToday(event.dateTime)">
+          <ion-icon name="time" class="icon"></ion-icon>Today {{getMonth(event.dateTime)}}, {{getDay(event.dateTime)}} from {{getHour(event.dateTime)}}
+        </p>
+        <p class="when" *ngIf="!checkIsTomorrow(event.dateTime)">
+            <ion-icon name="time" class="icon"></ion-icon>{{getDayName(event.dateTime)}} from {{getHour(event.dateTime)}}
+        </p>
+        <p class="when" *ngIf="checkIsTomorrow(event.dateTime)">
+            <ion-icon name="time" class="icon"></ion-icon>Tomorrow {{getMonth(event.dateTime)}}, {{getDay(event.dateTime)}} from {{getHour(event.dateTime)}}
+        </p>
+        <p class="going"><ion-icon name="speedometer" class="icon"></ion-icon>{{event.members.length}} Going</p>
+        <div class="members-container">
+            <ion-grid class="members-container">
+                <ion-row>
+                    <ion-col col-12 class="info-container">
+                      <img class="member-image" *ngFor="let i of event.members.slice(0,8); let j = index" [src]="i.photo" [ngStyle]="{'left':j*33 +'px', 'z-index':j}">
+                      
+                      <div class="others" *ngIf="event.members.length>8" [ngStyle]="{'left':event.members.slice(0,8).length*33+'px','z-index':event.members.slice(0,8).length+1}" >
+                          +{{event.members.length-8}}
+                      </div>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </div>
+        <div class="description-container" *ngIf="!show_more">
+          <p>{{description.substr(0,92)}}..  <span (click)="show_more=!show_more">Show more <ion-icon name="arrow-down"></ion-icon></span></p>
+        </div>
+        <div class="description-container" *ngIf="show_more">
+            <p>{{description}}  <span (click)="show_more=!show_more">Show less <ion-icon name="arrow-up"></ion-icon></span></p>
+        </div>
+      </div>
+      <div class="leave-message-container">
+        <input type="text" placeholder="Leave a message..." [(ngModel)]="message">
+        <button *ngIf="message!=''">
+            SEND<ion-icon name="send"></ion-icon>
+        </button>
+      </div>
+  </div>
+</ion-content>
+
